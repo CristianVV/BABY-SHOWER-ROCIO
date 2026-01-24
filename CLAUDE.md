@@ -1,455 +1,489 @@
-# CLAUDE.md - Baby Shower de Rocío
+# CLAUDE.md - Baby Shower Gift Registry
 
-> Context file for Claude Code sessions. Read this first.
+> **Context file for AI assistants.** Read this first before making any changes.
+
+---
+
+## Quick Reference
+
+| Item | Value |
+|------|-------|
+| **Project** | Private gift registry for baby shower events |
+| **Stack** | Next.js 14 + TypeScript + Tailwind + Prisma + PostgreSQL |
+| **Deployment** | Docker Compose (app + database) |
+| **Guest Password** | `Rocio2026` (configurable in admin) |
+| **Admin Password** | `AdminRocio2026` (configurable in admin) |
+| **Dev Server** | `http://localhost:3000` (or 3001/3002 if port busy) |
+| **Admin Panel** | `/admin/login` |
+
+---
 
 ## Project Overview
 
-**What:** A private, emotional gift registry web application for Rocío's baby shower.
-**Why:** Enable friends and family to contribute to gifts with manual payment verification.
-**Philosophy:** This is a **family coordination interface**, NOT an e-commerce platform.
+### What This Is
 
-### Core Principles
+A **private, password-protected gift registry** for Rocio's baby shower. Designed to be reusable for other events (birthdays, weddings, etc.) in the future.
+
+### Core Philosophy
+
+This is a **family coordination interface**, NOT an e-commerce platform:
+
 1. **Minimal friction** - Guest completes contribution in < 2 minutes
 2. **Emotional clarity** - Warm, calm, personal UX
 3. **Privacy by default** - Guests are anonymous to other guests
-4. **Operational simplicity** - Admin (Rocío/partner) verifies payments manually
+4. **Manual verification** - Admin verifies payments (Bizum, Revolut, etc.) manually
+
+### Current Event Details
+
+| Field | Value |
+|-------|-------|
+| Event | Baby Shower de Rocio |
+| Date | 15 February 2026, 13:00h |
+| Location | Calle de la Azalea, Alcobendas, Madrid |
+| Expected Guests | < 50 people |
+| Language | Spanish |
+| Currencies | EUR (Bizum, Revolut), COP (Bancolombia) |
+| WhatsApp | +34 649 22 55 90 |
 
 ---
 
-## Event Details
+## Tech Stack
 
-- **Event:** Baby Shower de Rocío
-- **Date:** 15 February 2026, 13:00h
-- **Location:** Calle de la Azalea, Alcobendas, Madrid
-- **Expected Guests:** < 50 people
-- **Primary Language:** Spanish
-- **Currencies:** EUR (Bizum, Revolut), COP (Bancolombia)
-- **Date Format:** European (DD/MM/YYYY)
+### Core Technologies
 
----
+| Technology | Version | Purpose |
+|------------|---------|---------|
+| Next.js | 14.2.28 | React framework with App Router |
+| TypeScript | 5.6.3 | Type safety |
+| Tailwind CSS | 3.4.14 | Styling |
+| Prisma | 5.22.0 | Database ORM |
+| PostgreSQL | 16-alpine | Database |
+| Framer Motion | 11.11.0 | Animations |
+| Docker | - | Containerization |
 
-## Technical Stack
+### Key Libraries
 
-### Framework & Runtime
-- **Framework:** Next.js 14 (App Router) + TypeScript
-- **Styling:** Tailwind CSS
-- **Animations:** Framer Motion
-- **State:** React useState/useContext (session-based cart)
-
-### Infrastructure
-- **Hosting:** Hostinger VPS (Docker deployment)
-- **Database:** PostgreSQL (in same Docker container)
-- **Container:** Single Docker Compose setup (app + db)
-- **Goal:** Easy deploy, easy teardown for MVP
-
-### Development Environment
-- **Primary IDE:** Google Antigravity (https://antigravity.google/)
-- **AI Assistant:** Claude Code
-- **Version Control:** Git
-
-#### Google Antigravity Integration Notes
-
-Google Antigravity is Google's AI-first IDE launched November 2025:
-- **Base:** Modified fork of VS Code with agentic capabilities
-- **AI Models:** Powered by Gemini 3, also supports Claude (Sonnet 4.5, Opus 4.5)
-- **Key Feature:** "Agent-first" paradigm with Editor view and Manager view
-- **MCP Support:** Model Context Protocol for secure data connections
-
-**Working with Antigravity + Claude Code:**
-- Both tools can be used in parallel (Antigravity for visual editing, Claude Code for CLI tasks)
-- Antigravity's Manager view can orchestrate multiple agents across workspaces
-- Claude Code (this tool) is ideal for:
-  - Complex multi-file refactors
-  - Database migrations and seeding
-  - Docker configuration
-  - Git operations
-  - Deployment scripts
-- Antigravity excels at:
-  - Visual component development
-  - Real-time preview
-  - Google Cloud integrations (if needed later)
-
-**Project Compatibility:**
-- All code should be standard Next.js/TypeScript (works in any IDE)
-- Dependencies managed via package.json
-- npm scripts for all operations
-- Docker Compose for environment parity
-- No IDE-specific configurations required
-
----
-
-## Design System
-
-### Theme: "Daisy Warmth"
-Inspired by the invitation video featuring chamomile/daisy bouquet.
-
-### Color Palette
-```css
-:root {
-  /* Backgrounds */
-  --bg-primary: #D9CBBA;      /* Warm beige from invitation */
-  --bg-secondary: #F5F0E8;    /* Lighter cream for cards */
-  --bg-white: #FFFEF9;        /* Off-white */
-
-  /* Text */
-  --text-primary: #3D3225;    /* Dark brown/sepia */
-  --text-secondary: #6B5D4D;  /* Medium brown */
-  --text-muted: #9A8B7A;      /* Light brown */
-
-  /* Accents */
-  --accent-yellow: #E8B931;   /* Daisy center gold */
-  --accent-green: #7A9B5C;    /* Stem green */
-  --accent-white: #FFFFFF;    /* Daisy petals */
-
-  /* States */
-  --success: #7A9B5C;         /* Green - verified */
-  --pending: #E8B931;         /* Yellow - pending */
-  --error: #C75D5D;           /* Soft red - rejected */
+```json
+{
+  "@prisma/client": "^5.22.0",
+  "clsx": "^2.1.1",
+  "framer-motion": "^11.11.0",
+  "tailwind-merge": "^2.5.4"
 }
 ```
 
-### Typography
-- **Headings:** Cormorant Garamond (elegant serif) - Google Fonts
-- **Body:** Inter (clean sans-serif) - Google Fonts
-- **Special:** "ROCÍO" uses a sophisticated serif with generous letter-spacing
-
-### Visual Style
-- Apple-inspired "warm minimalism"
-- Generous whitespace
-- Rounded cards (rounded-2xl to rounded-3xl)
-- Subtle shadows and micro-interactions
-- Mobile-first responsive design
-- No cartoons, no loud colors
-
-### Assets Location
-- `/invitation-video-frames/` - 109 PNG frames from invitation video
-  - Frame 000: Bouquet starting position
-  - Frame 054: Mid-animation with falling petals
-  - Frame 108: Final frame with event details (potential logo source)
-  - These can be used for scroll animations, backgrounds, or creative elements
-
 ---
 
-## Application Architecture
-
-### User Roles
-
-#### Guest (Anonymous)
-- Access via shared password (e.g., "Rocio2026")
-- Browse gift gallery
-- Add contributions to cart
-- Submit contribution intent
-- See payment instructions
-- Send WhatsApp confirmation
-
-#### Admin (Rocío/Partner)
-- Access via separate admin password
-- Route: `/admin`
-- Full CRUD on gifts and categories
-- Verify/reject contributions
-- Configure payment methods
-- View contribution timeline
-- Manage site settings
-
-### Data Model
-
-```typescript
-// Core entities
-
-interface Category {
-  id: string;
-  name: string;           // e.g., "Ropa", "Muebles", "Higiene"
-  order: number;
-  createdAt: Date;
-}
-
-interface Gift {
-  id: string;
-  categoryId: string;
-  title: string;
-  description?: string;
-  imageUrl?: string;       // Uploaded or external (Amazon, etc.)
-  externalUrl?: string;    // Link to store for "External Purchase" type
-  type: 'fundable' | 'external' | 'custom';
-  targetAmount?: number;   // For fundable gifts (in cents)
-  currentAmount: number;   // Verified contributions only
-  status: 'available' | 'partially_funded' | 'completed' | 'hidden';
-  createdAt: Date;
-  updatedAt: Date;
-}
-
-interface Contribution {
-  id: string;
-  giftId: string;
-  guestName: string;
-  guestPhone: string;
-  guestMessage?: string;   // Message for the baby
-  amount: number;          // In cents
-  currency: 'EUR' | 'COP';
-  paymentMethod: 'bizum' | 'revolut' | 'bancolombia';
-  status: 'pending' | 'verified' | 'rejected';
-  createdAt: Date;
-  verifiedAt?: Date;
-  verifiedBy?: string;
-}
-
-interface PaymentMethod {
-  id: string;
-  type: 'bizum' | 'revolut' | 'bancolombia';
-  label: string;
-  value: string;           // Phone number, link, or QR image URL
-  currency: 'EUR' | 'COP';
-  enabled: boolean;
-}
-
-interface SiteSettings {
-  guestPassword: string;
-  adminPassword: string;
-  eventTitle: string;
-  eventDate: string;
-  eventTime: string;
-  eventLocation: string;
-  heroMessage: string;
-  whatsappNumber: string;  // +34 649 22 55 90
-}
-```
-
-### Gift Types
-
-1. **Fundable Gift** (`type: 'fundable'`)
-   - Has target amount
-   - Multiple contributors allowed
-   - Minimum contribution: €10
-   - Shows progress bar
-   - Completed when `currentAmount >= targetAmount`
-
-2. **External Purchase** (`type: 'external'`)
-   - Links to external store (Amazon, etc.)
-   - Guest clicks "I've bought this"
-   - Admin verifies purchase
-
-3. **Custom Contribution** (`type: 'custom'`)
-   - Free amount, no target
-   - Optional message for baby
-   - General support category
-
-### Contribution Lifecycle
-```
-Guest submits intent
-        ↓
-  Status: PENDING
-        ↓
-Payment happens externally (Bizum/Revolut/Bancolombia)
-        ↓
-Admin verifies in dashboard
-        ↓
-  Status: VERIFIED ←→ REJECTED
-        ↓
-Progress bar updates (verified only)
-```
-
----
-
-## Key Features
-
-### Guest Experience
-1. **Password Gate** - Simple overlay, localStorage session
-2. **Hero Section** - Event info, gratitude message, optional scroll animation
-3. **Gift Gallery** - Filterable by category, clear status indicators
-4. **Cart System** - Session-based, multiple gifts
-5. **Checkout Flow** - Collect name, phone, message; show payment instructions
-6. **WhatsApp Confirmation** - Pre-filled message to +34 649 22 55 90
-
-### Admin Dashboard
-1. **Gift Management** - CRUD, image upload/URL, reorder
-2. **Category Management** - CRUD, reorder
-3. **Contribution Queue** - Pending items, verify/reject actions
-4. **Payment Settings** - Configure Bizum, Revolut, Bancolombia
-5. **Site Settings** - Passwords, event details, messages
-6. **Activity Log** - Recent contributions, timeline view
-
----
-
-## Payment Configuration
-
-### Default Payment Methods
-```
-Bizum: +34 649 22 55 90 (EUR)
-Revolut: [To be configured in admin]
-Bancolombia: [To be configured in admin - QR upload]
-```
-
-### WhatsApp Integration
-- Number: +34 649 22 55 90
-- Pre-filled message template:
-  ```
-  ¡Hola! Acabo de hacer una contribución para el baby shower de Rocío.
-
-  Regalo(s): {gift_names}
-  Cantidad: {amount} {currency}
-  Método: {payment_method}
-  Nombre: {guest_name}
-
-  ¡Gracias! 🌼
-  ```
-
----
-
-## File Structure
+## Project Structure
 
 ```
-/
-├── CLAUDE.md                    # This file
+baby-shower-rocio/
+├── CLAUDE.md                    # This file - AI context
+├── INSTRUCTIONS.md              # Setup & deployment guide
+├── handoff_prompt.md            # Context for new AI sessions
 ├── TASKS.md                     # Development task tracker
-├── docker-compose.yml           # App + PostgreSQL
-├── Dockerfile                   # Next.js production build
+│
+├── docker-compose.yml           # App + PostgreSQL containers
+├── Dockerfile                   # Multi-stage Next.js build
 ├── .env.example                 # Environment template
 ├── .gitignore
 ├── package.json
-├── tailwind.config.ts
+├── tailwind.config.ts           # Daisy Warmth theme colors
 ├── tsconfig.json
-├── next.config.js
+├── next.config.js               # standalone output for Docker
 │
 ├── prisma/
-│   ├── schema.prisma            # Database schema
-│   └── seed.ts                  # Initial categories + sample data
+│   ├── schema.prisma            # Database models
+│   ├── seed.ts                  # Initial data (categories, settings)
+│   └── migrations/              # Database migrations
 │
 ├── src/
 │   ├── app/
-│   │   ├── layout.tsx           # Root layout, fonts, providers
-│   │   ├── page.tsx             # Password gate + redirect
-│   │   ├── (guest)/
-│   │   │   ├── layout.tsx       # Guest layout with auth check
-│   │   │   ├── page.tsx         # Hero + Gift gallery
-│   │   │   ├── cart/
-│   │   │   │   └── page.tsx     # Cart review
-│   │   │   └── checkout/
-│   │   │       └── page.tsx     # Payment instructions
+│   │   ├── layout.tsx           # Root layout (fonts, metadata)
+│   │   ├── page.tsx             # Password gate entry point
 │   │   │
-│   │   ├── admin/
-│   │   │   ├── layout.tsx       # Admin layout with auth
-│   │   │   ├── page.tsx         # Dashboard overview
-│   │   │   ├── gifts/
-│   │   │   ├── categories/
-│   │   │   ├── contributions/
-│   │   │   ├── payments/
-│   │   │   └── settings/
+│   │   ├── (guest)/             # Guest route group
+│   │   │   ├── layout.tsx       # Guest auth check
+│   │   │   ├── gallery/page.tsx # Hero + gift gallery
+│   │   │   ├── checkout/page.tsx# Payment instructions
+│   │   │   └── gracias/page.tsx # Thank you page
 │   │   │
-│   │   └── api/
-│   │       ├── auth/
-│   │       ├── gifts/
-│   │       ├── categories/
-│   │       ├── contributions/
-│   │       └── settings/
+│   │   ├── admin/               # Admin area
+│   │   │   ├── login/page.tsx   # Admin login
+│   │   │   └── (dashboard)/     # Protected dashboard routes
+│   │   │       ├── page.tsx     # Dashboard overview
+│   │   │       ├── gifts/       # Gift CRUD
+│   │   │       ├── categories/  # Category management
+│   │   │       ├── contributions/# Verify payments
+│   │   │       ├── payments/    # Payment methods config
+│   │   │       └── settings/    # Site settings
+│   │   │
+│   │   └── api/                 # API routes
+│   │       ├── auth/            # Login/logout endpoints
+│   │       ├── gifts/           # Gift CRUD API
+│   │       ├── categories/      # Category API
+│   │       ├── contributions/   # Contribution API
+│   │       ├── payment-methods/ # Payment config API
+│   │       └── settings/        # Site settings API
 │   │
 │   ├── components/
-│   │   ├── ui/                  # Base components (Button, Card, Input, etc.)
 │   │   ├── guest/               # Guest-facing components
-│   │   │   ├── PasswordGate.tsx
-│   │   │   ├── HeroSection.tsx
-│   │   │   ├── GiftCard.tsx
-│   │   │   ├── GiftGallery.tsx
-│   │   │   ├── CartDrawer.tsx
-│   │   │   └── CheckoutFlow.tsx
+│   │   │   ├── PasswordGate.tsx # Password entry screen
+│   │   │   ├── HeroSection.tsx  # Event info header
+│   │   │   ├── GiftCard.tsx     # Individual gift display
+│   │   │   ├── GiftGallery.tsx  # Gift grid with filters
+│   │   │   ├── GalleryClient.tsx# Client-side gallery wrapper
+│   │   │   ├── CartDrawer.tsx   # Slide-out cart
+│   │   │   └── CurrencySelector.tsx
 │   │   │
-│   │   └── admin/               # Admin components
-│   │       ├── Sidebar.tsx
-│   │       ├── GiftForm.tsx
-│   │       ├── ContributionTable.tsx
-│   │       └── ...
-│   │
-│   ├── lib/
-│   │   ├── db.ts                # Prisma client
-│   │   ├── auth.ts              # Password session logic
-│   │   ├── utils.ts             # Helpers
-│   │   └── constants.ts         # App constants
+│   │   ├── admin/               # Admin components
+│   │   │   ├── AdminSidebar.tsx # Navigation sidebar
+│   │   │   ├── AdminPageWrapper.tsx
+│   │   │   ├── GiftTable.tsx    # Gift list table
+│   │   │   ├── ContributionCard.tsx
+│   │   │   └── StatsCard.tsx    # Dashboard stats
+│   │   │
+│   │   └── ui/                  # Shared UI components
+│   │       ├── Button.tsx
+│   │       └── ProgressBar.tsx
 │   │
 │   ├── hooks/
-│   │   ├── useCart.ts
-│   │   ├── useAuth.ts
-│   │   └── ...
+│   │   └── useCart.tsx          # Cart state (React Context)
+│   │
+│   ├── lib/
+│   │   ├── db.ts                # Prisma client singleton
+│   │   ├── auth.ts              # Cookie-based session auth
+│   │   └── utils.ts             # Helpers (cn, formatCurrency)
 │   │
 │   └── types/
 │       └── index.ts             # TypeScript interfaces
 │
 ├── public/
-│   ├── fonts/
-│   └── images/
+│   └── uploads/                 # User-uploaded images
 │
-└── invitation-video-frames/     # Source frames (not deployed)
-    └── *.png
+└── invitation-video-frames/     # Source video frames (gitignored)
 ```
+
+---
+
+## Database Schema
+
+### Models Overview
+
+```
+Category ──┬── Gift ──┬── Contribution
+           │          │
+PaymentMethod         │
+           │          │
+SiteSettings ─────────┘
+```
+
+### Category
+
+```prisma
+model Category {
+  id        String   @id @default(cuid())
+  name      String              // "Ropa", "Muebles", etc.
+  slug      String   @unique    // "ropa", "muebles"
+  order     Int      @default(0)
+  gifts     Gift[]
+}
+```
+
+### Gift
+
+```prisma
+model Gift {
+  id            String      @id @default(cuid())
+  categoryId    String
+  title         String
+  description   String?
+  imageUrl      String?
+  externalUrl   String?     // Amazon link for external purchases
+  type          GiftType    // fundable | external | custom
+  targetAmount  Int?        // In cents, for fundable gifts
+  currentAmount Int         @default(0)  // Verified total
+  status        GiftStatus  // available | partially_funded | completed | hidden
+  order         Int         @default(0)
+  contributions Contribution[]
+}
+```
+
+### Contribution
+
+```prisma
+model Contribution {
+  id            String             @id @default(cuid())
+  giftId        String
+  guestName     String
+  guestPhone    String
+  guestMessage  String?           // Optional message for baby
+  amount        Int               // In cents
+  currency      Currency          // EUR | COP
+  paymentMethod PaymentMethodType // bizum | revolut | bancolombia
+  status        ContributionStatus // pending | verified | rejected
+  verifiedAt    DateTime?
+  verifiedBy    String?
+}
+```
+
+### PaymentMethod
+
+```prisma
+model PaymentMethod {
+  id       String            @id @default(cuid())
+  type     PaymentMethodType @unique
+  label    String            // Display name
+  value    String            // Phone number or link
+  currency Currency
+  enabled  Boolean           @default(true)
+}
+```
+
+### SiteSettings
+
+```prisma
+model SiteSettings {
+  id             String @id @default("settings")
+  guestPassword  String @default("Rocio2026")
+  adminPassword  String @default("AdminRocio2026")
+  eventTitle     String @default("Baby Shower de Rocio")
+  eventDate      String @default("15 de febrero de 2026")
+  eventTime      String @default("13:00h")
+  eventLocation  String
+  heroMessage    String
+  whatsappNumber String @default("+34649225590")
+}
+```
+
+---
+
+## Gift Types
+
+### 1. Fundable Gift (`type: 'fundable'`)
+
+- Has a target amount (e.g., €200 for a stroller)
+- Multiple guests can contribute
+- Shows progress bar
+- Completed when `currentAmount >= targetAmount`
+- Minimum contribution: €10
+
+### 2. External Purchase (`type: 'external'`)
+
+- Links to external store (Amazon, etc.)
+- Guest clicks "I've bought this" and marks as purchased
+- No monetary tracking, just status
+
+### 3. Custom Contribution (`type: 'custom'`)
+
+- Free-form amount, no target
+- For general support / monetary gifts
+- Optional message for the baby
+
+---
+
+## Authentication System
+
+### How It Works
+
+- **Cookie-based sessions** (no user accounts)
+- Two session types: `guest` and `admin`
+- Cookies stored in HTTP-only cookies via `src/lib/auth.ts`
+
+### Authentication Flow
+
+```
+Guest Flow:
+  / (page.tsx) → Check session → Not authenticated → Show PasswordGate
+                               → Guest authenticated → Redirect to /gallery
+                               → Admin authenticated → Redirect to /admin
+
+Admin Flow:
+  /admin/login → Enter password → Set admin session → Redirect to /admin
+  /admin/(dashboard)/* → Check session → Not admin → Redirect to /admin/login
+```
+
+### Key Functions (`src/lib/auth.ts`)
+
+```typescript
+getSession()        // Returns: 'guest' | 'admin' | null
+setGuestSession()   // Sets guest cookie
+setAdminSession()   // Sets admin cookie
+clearSession()      // Removes session cookie
+```
+
+---
+
+## API Routes
+
+### Authentication
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | `/api/auth/guest` | Validate guest password |
+| POST | `/api/auth/admin` | Validate admin password |
+| POST | `/api/auth/logout` | Clear session |
+| GET | `/api/auth/check` | Check current session |
+
+### Gifts
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/gifts` | List all gifts |
+| POST | `/api/gifts` | Create gift (admin) |
+| GET | `/api/gifts/[id]` | Get single gift |
+| PUT | `/api/gifts/[id]` | Update gift (admin) |
+| DELETE | `/api/gifts/[id]` | Delete gift (admin) |
+
+### Categories
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/categories` | List categories |
+| POST | `/api/categories` | Create category (admin) |
+| PUT | `/api/categories/[id]` | Update category |
+| DELETE | `/api/categories/[id]` | Delete category |
+
+### Contributions
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/contributions` | List contributions (admin) |
+| POST | `/api/contributions` | Create contribution (guest) |
+| PUT | `/api/contributions/[id]` | Verify/reject (admin) |
+| GET | `/api/contributions/stats` | Get statistics |
+
+### Settings
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/settings` | Get site settings |
+| PUT | `/api/settings` | Update settings (admin) |
+| GET | `/api/payment-methods` | List payment methods |
+| PUT | `/api/payment-methods` | Update payment methods |
+
+---
+
+## Design System: "Daisy Warmth"
+
+### Color Palette
+
+Inspired by the invitation video featuring chamomile/daisy bouquet.
+
+```css
+/* Backgrounds */
+--background:       #D9CBBA;  /* Warm beige */
+--background-light: #F5F0E8;  /* Light cream (cards) */
+--background-white: #FFFEF9;  /* Off-white */
+
+/* Text */
+--foreground:           #3D3225;  /* Dark brown */
+--foreground-secondary: #6B5D4D;  /* Medium brown */
+--foreground-muted:     #9A8B7A;  /* Light brown */
+
+/* Accents */
+--accent-yellow: #E8B931;  /* Daisy center gold */
+--accent-green:  #7A9B5C;  /* Stem green */
+
+/* States */
+--state-success: #7A9B5C;  /* Green - verified */
+--state-pending: #E8B931;  /* Yellow - pending */
+--state-error:   #C75D5D;  /* Soft red - rejected */
+```
+
+### Typography
+
+| Usage | Font | Source |
+|-------|------|--------|
+| Headings | Cormorant Garamond | Google Fonts |
+| Body | Inter | Google Fonts |
+
+### Visual Style Guidelines
+
+- Apple-inspired "warm minimalism"
+- Generous whitespace
+- Rounded cards (`rounded-2xl` to `rounded-3xl`)
+- Subtle shadows
+- Mobile-first responsive design
+- No cartoons or loud colors
 
 ---
 
 ## Commands Reference
 
 ### Development
+
 ```bash
 # Install dependencies
 npm install
 
-# Start development (with Docker DB)
+# Start PostgreSQL (Docker)
 docker-compose up -d db
-npm run dev
 
 # Run database migrations
 npx prisma migrate dev
 
-# Seed database
-npx prisma db seed
+# Seed database with initial data
+npm run db:seed
 
-# Open Prisma Studio (DB GUI)
+# Start development server
+npm run dev
+
+# Or start on different port
+PORT=3002 npm run dev
+
+# Open Prisma Studio (database GUI)
 npx prisma studio
 ```
 
-### Production
+### Production (Docker)
+
 ```bash
 # Build and start all containers
 docker-compose up --build -d
 
 # View logs
-docker-compose logs -f
+docker-compose logs -f app
 
-# Stop and remove
+# Stop containers
 docker-compose down
 
-# Stop and remove INCLUDING data
+# Stop and remove all data
 docker-compose down -v
 ```
 
-### Deployment to Hostinger VPS
+### Database
+
 ```bash
-# SSH into VPS
-ssh user@your-vps-ip
+# Generate Prisma client after schema changes
+npm run db:generate
 
-# Clone repo
-git clone <repo-url>
-cd baby-shower-rocio
+# Create a new migration
+npx prisma migrate dev --name description_of_change
 
-# Copy environment
-cp .env.example .env
-# Edit .env with production values
+# Apply migrations in production
+npx prisma migrate deploy
 
-# Start
-docker-compose -f docker-compose.prod.yml up --build -d
+# Reset database (WARNING: destroys data)
+npx prisma migrate reset
 ```
 
 ---
 
 ## Environment Variables
 
+Create a `.env` file (copy from `.env.example`):
+
 ```env
-# Database
+# Database (Docker internal network)
 DATABASE_URL="postgresql://postgres:postgres@db:5432/babyshower?schema=public"
+
+# For local development (outside Docker)
+# DATABASE_URL="postgresql://postgres:postgres@localhost:5432/babyshower?schema=public"
 
 # App
 NEXT_PUBLIC_APP_URL="http://localhost:3000"
 NODE_ENV="development"
-
-# Initial passwords (can be changed in admin)
-INITIAL_GUEST_PASSWORD="Rocio2026"
-INITIAL_ADMIN_PASSWORD="AdminRocio2026"
 
 # WhatsApp
 NEXT_PUBLIC_WHATSAPP_NUMBER="+34649225590"
@@ -457,62 +491,204 @@ NEXT_PUBLIC_WHATSAPP_NUMBER="+34649225590"
 
 ---
 
+## User Flows
+
+### Guest Flow
+
+```
+1. Visit site → Password gate appears
+2. Enter password "Rocio2026" → Redirected to /gallery
+3. Browse gifts by category
+4. Click gift → See details, contribute amount
+5. Add to cart → Cart drawer opens
+6. Proceed to checkout → Enter name, phone, optional message
+7. See payment instructions (Bizum: +34 649 22 55 90)
+8. Make external payment via Bizum app
+9. Click "Send WhatsApp confirmation" → Opens WhatsApp with pre-filled message
+10. See thank you page
+```
+
+### Admin Flow
+
+```
+1. Visit /admin/login → Enter admin password
+2. Dashboard shows: pending contributions, recent activity, stats
+3. Navigate via sidebar:
+   - Gifts: Add/edit/delete gifts, set prices, upload images
+   - Categories: Manage categories, reorder
+   - Contributions: Verify or reject pending payments
+   - Payments: Configure Bizum/Revolut/Bancolombia details
+   - Settings: Change passwords, event details, hero message
+4. When contribution comes in:
+   - Check Bizum for matching payment
+   - Click "Verify" to confirm → Updates gift progress
+   - Click "Reject" if payment not found
+```
+
+---
+
+## Seeded Data
+
+The database is seeded with:
+
+### Categories (9)
+
+1. Ropa (Clothing)
+2. Muebles (Furniture)
+3. Higiene (Hygiene)
+4. Alimentacion (Feeding)
+5. Juguetes (Toys)
+6. Paseo (Strollers/Travel)
+7. Tecnologia (Technology)
+8. Bano (Bathroom)
+9. Otros (Other)
+
+### Payment Methods (1 default)
+
+- **Bizum**: +34 649 22 55 90 (EUR)
+
+### Site Settings
+
+- Guest password: `Rocio2026`
+- Admin password: `AdminRocio2026`
+- Event: Baby Shower de Rocio
+- Date: 15 de febrero de 2026, 13:00h
+- Location: Calle de la Azalea, Alcobendas, Madrid
+
+---
+
+## Code Style Guidelines
+
+### TypeScript
+
+- Strict mode enabled
+- Use interfaces over types when possible
+- Explicit return types on exported functions
+
+### React
+
+- Server Components by default
+- `'use client'` only when needed (interactivity, hooks)
+- Functional components with hooks
+- Props interfaces defined above component
+
+### Styling
+
+- Tailwind CSS exclusively (no CSS modules)
+- Use `cn()` helper from `lib/utils.ts` for conditional classes
+- Consistent spacing with Tailwind scale
+
+### Database
+
+- All monetary values in **cents** (integer)
+- Dates as ISO strings for display fields
+- `cuid()` for all IDs
+
+### Naming
+
+- Files: PascalCase for components, camelCase for utils
+- Variables/functions: camelCase
+- Types/interfaces: PascalCase
+- Database fields: camelCase
+- UI text: Spanish
+- Code comments: English
+
+### Commit Messages
+
+Format: `type: brief description`
+
+Types: `feat`, `fix`, `refactor`, `style`, `docs`, `chore`
+
+Example: `feat: add contribution verification flow`
+
+---
+
 ## Future Considerations (Post-MVP)
 
-> These are noted for future development phases. Do NOT implement in MVP.
+> These are noted for future phases. Do NOT implement unless explicitly requested.
 
 ### Phase 2: Polish
-- [ ] Scroll-based animation using video frames
-- [ ] Email notifications (optional)
+
+- [ ] Scroll-based animation using invitation video frames
+- [ ] Email notifications for new contributions
 - [ ] Export contributions to CSV
 - [ ] Print-friendly gift list
+- [ ] Image upload to external storage (S3/Cloudinary)
 
 ### Phase 3: Multi-Tenant
+
 - [ ] Event creation wizard
-- [ ] Subdomain or path-based routing (`/events/{slug}`)
+- [ ] Multiple events per installation
 - [ ] User accounts for event organizers
 - [ ] Template system for different event types
 - [ ] Stripe/payment gateway integration
 - [ ] SaaS pricing model
 
 ### Compliance (Phase 2+)
+
 - [ ] GDPR compliance audit
-- [ ] Cookie consent
-- [ ] Data retention policies
+- [ ] Cookie consent banner
 - [ ] Privacy policy page
 - [ ] Terms of service
 
 ---
 
-## Working with Claude Code
+## Troubleshooting
 
-### Session Start Checklist
-1. Read this CLAUDE.md file
-2. Check TASKS.md for current progress
-3. Review any recent git commits
-4. Ask for clarification if task is ambiguous
+### Port Already in Use
 
-### Code Style
-- TypeScript strict mode
-- Functional components with hooks
-- Server Components by default, 'use client' when needed
-- Tailwind for styling (no CSS modules)
-- Prisma for database operations
-- Descriptive variable names in English
-- UI text in Spanish
+```bash
+# Check what's using port 3000
+lsof -i :3000
 
-### Commit Messages
-Format: `type: brief description`
-Types: `feat`, `fix`, `refactor`, `style`, `docs`, `chore`
-Example: `feat: add gift card component with progress bar`
+# Run on different port
+PORT=3002 npm run dev
+```
+
+### Database Connection Issues
+
+```bash
+# Ensure PostgreSQL container is running
+docker ps
+
+# If not running, start it
+docker-compose up -d db
+
+# Check logs
+docker-compose logs db
+```
+
+### Prisma Issues
+
+```bash
+# Regenerate client
+npx prisma generate
+
+# Reset database (development only)
+npx prisma migrate reset
+
+# View database in browser
+npx prisma studio
+```
+
+### Build Failures
+
+```bash
+# Clear Next.js cache
+rm -rf .next
+
+# Clear node_modules and reinstall
+rm -rf node_modules package-lock.json
+npm install
+```
 
 ---
 
-## Contacts
+## Contact
 
-- **Developer:** Cristian Vidal
-- **End User (Admin):** Rocío (non-technical)
-- **WhatsApp for contributions:** +34 649 22 55 90
+- **Developer**: Cristian Vidal
+- **End User (Admin)**: Rocio (non-technical)
+- **WhatsApp for contributions**: +34 649 22 55 90
 
 ---
 
