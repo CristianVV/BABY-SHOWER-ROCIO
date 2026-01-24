@@ -1,0 +1,108 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Gift categories (Ropa, Muebles, Higiene, etc.)
+model Category {
+  id        String   @id @default(cuid())
+  name      String
+  slug      String   @unique
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  gifts     Gift[]
+}
+
+// Three types: fundable, external, custom
+enum GiftType {
+  fundable
+  external
+  custom
+}
+
+enum GiftStatus {
+  available
+  partially_funded
+  completed
+  hidden
+}
+
+model Gift {
+  id            String        @id @default(cuid())
+  categoryId    String
+  category      Category      @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  title         String
+  description   String?
+  imageUrl      String?
+  externalUrl   String?       // For external purchase links (Amazon, etc.)
+  type          GiftType
+  targetAmount  Int?          // In cents, for fundable gifts
+  currentAmount Int           @default(0) // Verified contributions only, in cents
+  status        GiftStatus    @default(available)
+  order         Int           @default(0)
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  contributions Contribution[]
+}
+
+enum ContributionStatus {
+  pending
+  verified
+  rejected
+}
+
+enum PaymentMethodType {
+  bizum
+  revolut
+  bancolombia
+}
+
+enum Currency {
+  EUR
+  COP
+}
+
+model Contribution {
+  id            String             @id @default(cuid())
+  giftId        String
+  gift          Gift               @relation(fields: [giftId], references: [id], onDelete: Cascade)
+  guestName     String
+  guestPhone    String
+  guestMessage  String?            // Message for the baby
+  amount        Int                // In cents
+  currency      Currency
+  paymentMethod PaymentMethodType
+  status        ContributionStatus @default(pending)
+  createdAt     DateTime           @default(now())
+  verifiedAt    DateTime?
+  verifiedBy    String?
+}
+
+model PaymentMethod {
+  id       String            @id @default(cuid())
+  type     PaymentMethodType @unique
+  label    String            // Display name
+  value    String            // Phone number, link, or image path
+  currency Currency
+  enabled  Boolean           @default(true)
+  order    Int               @default(0)
+}
+
+model SiteSettings {
+  id             String   @id @default("settings")
+  guestPassword  String   @default("Rocio2026")
+  adminPassword  String   @default("AdminRocio2026")
+  eventTitle     String   @default("Baby Shower de Rocío")
+  eventDate      String   @default("15 de febrero de 2026")
+  eventTime      String   @default("13:00h")
+  eventLocation  String   @default("Calle de la Azalea, Alcobendas, Madrid")
+  heroMessage    String   @default("Gracias por acompañarnos en esta celebración tan especial. Tu cariño y generosidad significan el mundo para nosotros.")
+  whatsappNumber String   @default("+34649225590")
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
