@@ -18,6 +18,14 @@
 
 ---
 
+## 🤖 Agentic Workflow Rules
+
+1.  **Documentation First**: You **MUST** update `CLAUDE.md` (for context/rules) and `TASKS.md` (for progress) as you work.
+2.  **Transparency**: If you make architectural changes, reference them in `README.md`.
+3.  **Verification**: Always verify your changes before marking a task as complete.
+
+---
+
 ## Project Overview
 
 ### What This Is
@@ -372,7 +380,7 @@ Inspired by the invitation video featuring chamomile/daisy bouquet.
 
 ```css
 /* Backgrounds */
---background:       #D9CBBA;  /* Warm beige */
+--background:       #E6DCCA;  /* Sand color */
 --background-light: #F5F0E8;  /* Light cream (cards) */
 --background-white: #FFFEF9;  /* Off-white */
 
@@ -600,6 +608,12 @@ Format: `type: brief description`
 Types: `feat`, `fix`, `refactor`, `style`, `docs`, `chore`
 
 Example: `feat: add contribution verification flow`
+
+---
+
+## Verification Log
+
+- **2026-01-24**: Verified Guest and Admin flows. App runs successfully on Docker. Fallback port 3001 is used if 3000 is busy.
 
 ---
 

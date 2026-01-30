@@ -94,12 +94,12 @@
 
 ### Guest Components (src/components/guest/)
 - [ ] **2.11** PasswordGate - Full-screen password entry
-- [ ] **2.12** HeroSection - Event info, welcome message, daisy theme
+- [x] **2.12** HeroSection - Event info, welcome message, daisy theme
 - [ ] **2.13** GiftCard - Display single gift with type-specific UI
   - Fundable: progress bar, contribute button
   - External: "Ver en tienda" + "Ya lo compré" buttons
   - Custom: amount input, message field
-- [ ] **2.14** GiftGallery - Grid with category filters
+- [x] **2.14** GiftGallery - Grid with category filters (Bigger buttons, 4-column layout)
 - [ ] **2.15** CartDrawer - Slide-over with cart items
 - [ ] **2.16** CartItem - Single item in cart
 - [ ] **2.17** CheckoutFlow - Multi-step: info → payment → confirm

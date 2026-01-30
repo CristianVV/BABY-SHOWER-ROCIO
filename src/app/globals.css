@@ -4,6 +4,7 @@
 
 @layer base {
   :root {
+    /* Original Beige/Sand */
     --background: 35 22% 79%;
     --foreground: 30 18% 19%;
   }
@@ -14,10 +15,22 @@
 
   body {
     @apply bg-background text-foreground font-sans antialiased;
+    cursor: url('/daisy-cursor.png'), auto;
   }
 
-  h1, h2, h3, h4, h5, h6 {
+  a,
+  button {
+    cursor: pointer;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     @apply font-serif;
+    color: theme('colors.foreground.title');
   }
 }
 
