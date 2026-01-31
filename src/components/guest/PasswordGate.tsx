@@ -50,15 +50,18 @@ export default function PasswordGate({ validatePassword }: PasswordGateProps) {
         <div className="card p-8 md:p-10 shadow-lg">
           {/* Header */}
           <div className="text-center mb-8">
-            <div className="relative w-full h-24 mb-4">
+            <div className="relative w-full h-32 mb-4">
               <Image
-                src="/Baby-Shower-text.png"
+                src="/daisies_main.png"
                 alt="Baby Shower de Rocío"
                 fill
                 className="object-contain"
                 priority
               />
             </div>
+            <h1 className="font-heading text-3xl md:text-4xl text-foreground mb-2">
+              Baby Shower de Rocío
+            </h1>
             <p className="text-foreground-secondary text-sm md:text-base">
               Introduce la contrasena para acceder a la lista de regalos
             </p>
