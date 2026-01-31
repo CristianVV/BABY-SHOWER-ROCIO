@@ -22,7 +22,8 @@ This project follows an **Agentic-First** development approach.
 
 - [**CLAUDE.md**](./CLAUDE.md): **AI Context & Rules**
 - [**TASKS.md**](./TASKS.md): **Progress Tracker**
-- [**INSTRUCTIONS.md**](./INSTRUCTIONS.md): **Setup Guide**
+- [**INSTRUCTIONS.md**](./INSTRUCTIONS.md): **Local Setup Guide**
+- [**VPS_DEPLOYMENT.md**](./VPS_DEPLOYMENT.md): **VPS Deployment & Cleanup Guide**
 
 ### Recent Updates
 - **Design Refresh**: Updated background to Sand color (`#E6DCCA`) and refined typography colors.

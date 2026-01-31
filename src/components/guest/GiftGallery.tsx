@@ -164,7 +164,7 @@ export default function GiftGallery({
                 Lista de Nacimiento en Amazon
               </h3>
               <p className="text-foreground-secondary text-sm md:text-base max-w-lg">
-                Hemos creado también una lista en Amazon con cositas que nos harían mucha ilusión.
+                Hemos creado también una lista en Amazon con cositas que nos harían mucha ilusión. Si decides acceder directamente a Amazon a través de este enlace disfrutarás de un descuento especial en algunos productos por estar en la lista de este Baby Shower. Si compras algo por Amazon no te olvides de volver aquí y marcarlo como "Ya lo compré" para que no lo compren dos veces. ¡Muchas gracias!
               </p>
             </div>
             <a

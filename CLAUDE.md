@@ -15,6 +15,7 @@
 | **Admin Password** | `AdminRocio2026` (configurable in admin) |
 | **Dev Server** | `http://localhost:3000` (or 3001/3002 if port busy) |
 | **Admin Panel** | `/admin/login` |
+| **VPS Guide** | See [VPS_DEPLOYMENT.md](./VPS_DEPLOYMENT.md) for deployment & cleanup |
 
 ---
 
@@ -699,6 +700,23 @@ npm install
 
 ---
 
+## Deployment Documentation
+
+For complete deployment and cleanup instructions, see:
+
+- **[INSTRUCTIONS.md](./INSTRUCTIONS.md)** - Local development setup and Docker deployment
+- **[VPS_DEPLOYMENT.md](./VPS_DEPLOYMENT.md)** - Complete VPS deployment guide with step-by-step cleanup instructions
+
+**VPS_DEPLOYMENT.md includes:**
+- Initial VPS setup and security configuration
+- Application deployment with Docker
+- Nginx reverse proxy configuration
+- SSL certificate setup with Let's Encrypt
+- Monitoring and maintenance procedures
+- **Complete removal guide** - How to cleanly remove the application without leaving any residues after the event
+
+---
+
 ## Contact
 
 - **Developer**: Cristian Vidal
@@ -707,4 +725,4 @@ npm install
 
 ---
 
-*Last updated: January 30, 2026*
+*Last updated: January 31, 2026*
