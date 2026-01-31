@@ -140,6 +140,7 @@ baby-shower-rocio/
 │   │   │   ├── PasswordGate.tsx # Password entry screen
 │   │   │   ├── HeroSection.tsx  # Event info header
 │   │   │   ├── GiftCard.tsx     # Individual gift display
+│   │   │   ├── ExternalPurchaseModal.tsx  # Direct checkout for external purchases
 │   │   │   ├── GiftGallery.tsx  # Gift grid with filters
 │   │   │   ├── GalleryClient.tsx# Client-side gallery wrapper
 │   │   │   ├── CartDrawer.tsx   # Slide-out cart
@@ -517,6 +518,13 @@ NEXT_PUBLIC_WHATSAPP_NUMBER="+34649225590"
 10. See thank you page
 ```
 
+### External Purchase Flow (New - 2026-01-31)
+
+For gifts with external purchase links (e.g., Amazon), a streamlined flow bypasses the cart:
+
+```
+1. Guest browses gifts in /gallery
+2. Clicks on gift with external link (marked Compra
 ### Admin Flow
 
 ```
