@@ -50,5 +50,6 @@ EXPOSE 3000
 ENV PORT 3000
 ENV HOSTNAME "0.0.0.0"
 
-# Run migrations and start (use bundled prisma to avoid version mismatch)
-CMD ["sh", "-c", "node ./node_modules/prisma/build/index.js migrate deploy && node server.js"]
+# Start server (migrations already applied to production database)
+# Note: For new schema changes, run migrations manually via docker exec
+CMD ["node", "server.js"]
