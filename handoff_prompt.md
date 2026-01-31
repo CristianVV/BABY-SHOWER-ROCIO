@@ -20,6 +20,12 @@ Please read the `CLAUDE.md` file in this directory first - it contains comprehen
 
 The MVP is **fully functional** and includes:
 
+> **Note (2026-01-30):** Fixed checkout bugs and added external purchase tracking:
+> 1. Payment methods weren't displaying (API format mismatch)
+> 2. External purchase checkout now tracks in database (admin can verify → removes from gallery)
+> 3. Added reminder popup when clicking "Ver en tienda"
+> See TASKS.md changelog for details.
+
 - **Guest Portal** (password: `Rocio2026`)
   - Password gate entry
   - Gift gallery with **improved 4-column grid layout** and **toggleable filters**

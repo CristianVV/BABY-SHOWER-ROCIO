@@ -73,7 +73,13 @@ export default function GiftCard({
 
   const handleExternalPurchase = () => {
     if (gift.externalUrl) {
-      window.open(gift.externalUrl, "_blank", "noopener,noreferrer");
+      // Show reminder popup before opening external link
+      const confirmed = window.confirm(
+        "¡Recuerda volver aquí a marcar el regalo como que \"Ya lo has comprado\" si lo compras en Amazon o a través de otro enlace! ¡Muchas gracias!"
+      );
+      if (confirmed) {
+        window.open(gift.externalUrl, "_blank", "noopener,noreferrer");
+      }
     }
   };
 

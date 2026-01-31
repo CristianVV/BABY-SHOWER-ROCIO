@@ -613,6 +613,7 @@ Example: `feat: add contribution verification flow`
 
 ## Verification Log
 
+- **2026-01-30**: Fixed checkout bug where payment methods were not displaying. Root cause: API returns raw array but checkout expected `{ success, data }` wrapper. Updated `src/app/(guest)/checkout/page.tsx` to handle both formats.
 - **2026-01-24**: Verified Guest and Admin flows. App runs successfully on Docker. Fallback port 3001 is used if 3000 is busy.
 
 ---
@@ -706,4 +707,4 @@ npm install
 
 ---
 
-*Last updated: January 2026*
+*Last updated: January 30, 2026*

@@ -80,6 +80,7 @@ export async function POST(request: NextRequest) {
       amount,
       currency,
       paymentMethod,
+      isExternalPurchase, // Flag for external gift purchases (no payment needed)
     } = body;
 
     // Validation
@@ -104,43 +105,46 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    if (!amount || typeof amount !== "number" || amount <= 0) {
-      return NextResponse.json(
-        { error: "El monto debe ser mayor a 0" },
-        { status: 400 }
-      );
-    }
+    // External purchases don't require amount, currency, or payment method validation
+    if (!isExternalPurchase) {
+      if (!amount || typeof amount !== "number" || amount <= 0) {
+        return NextResponse.json(
+          { error: "El monto debe ser mayor a 0" },
+          { status: 400 }
+        );
+      }
 
-    if (!currency || !["EUR", "COP"].includes(currency)) {
-      return NextResponse.json(
-        { error: "La moneda es inválida" },
-        { status: 400 }
-      );
-    }
+      if (!currency || !["EUR", "COP"].includes(currency)) {
+        return NextResponse.json(
+          { error: "La moneda es inválida" },
+          { status: 400 }
+        );
+      }
 
-    if (!paymentMethod || !["bizum", "revolut", "bancolombia"].includes(paymentMethod)) {
-      return NextResponse.json(
-        { error: "El método de pago es inválido" },
-        { status: 400 }
-      );
-    }
+      if (!paymentMethod || !["bizum", "revolut", "bancolombia"].includes(paymentMethod)) {
+        return NextResponse.json(
+          { error: "El método de pago es inválido" },
+          { status: 400 }
+        );
+      }
 
-    // Minimum contribution check (10 EUR or equivalent)
-    const minAmountEUR = 1000; // 10 EUR in cents
-    const minAmountCOP = 50000; // Approximate COP equivalent in cents
+      // Minimum contribution check (10 EUR or equivalent)
+      const minAmountEUR = 1000; // 10 EUR in cents
+      const minAmountCOP = 50000; // Approximate COP equivalent in cents
 
-    if (currency === "EUR" && amount < minAmountEUR) {
-      return NextResponse.json(
-        { error: "La contribución mínima es de 10 EUR" },
-        { status: 400 }
-      );
-    }
+      if (currency === "EUR" && amount < minAmountEUR) {
+        return NextResponse.json(
+          { error: "La contribución mínima es de 10 EUR" },
+          { status: 400 }
+        );
+      }
 
-    if (currency === "COP" && amount < minAmountCOP) {
-      return NextResponse.json(
-        { error: "La contribución mínima es de 500 COP" },
-        { status: 400 }
-      );
+      if (currency === "COP" && amount < minAmountCOP) {
+        return NextResponse.json(
+          { error: "La contribución mínima es de 500 COP" },
+          { status: 400 }
+        );
+      }
     }
 
     // Check if gift exists and is available
@@ -170,15 +174,25 @@ export async function POST(request: NextRequest) {
     }
 
     // Create contribution with pending status
+    // For external purchases, use defaults for amount/currency/paymentMethod
+    // Preserve guest message and add external purchase indicator
+    let finalMessage = guestMessage?.trim() || null;
+    if (isExternalPurchase) {
+      // Combine guest message with external purchase indicator
+      finalMessage = finalMessage
+        ? `${finalMessage} [Comprado externamente]`
+        : "Comprado externamente";
+    }
+
     const contribution = await prisma.contribution.create({
       data: {
         giftId,
         guestName: guestName.trim(),
         guestPhone: guestPhone.trim(),
-        guestMessage: guestMessage?.trim() || null,
-        amount,
-        currency: currency as Currency,
-        paymentMethod: paymentMethod as PaymentMethodType,
+        guestMessage: finalMessage,
+        amount: isExternalPurchase ? 0 : amount,
+        currency: (isExternalPurchase ? "EUR" : currency) as Currency,
+        paymentMethod: (isExternalPurchase ? "bizum" : paymentMethod) as PaymentMethodType,
         status: "pending",
       },
       include: {

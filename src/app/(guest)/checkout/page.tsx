@@ -33,11 +33,11 @@ export default function CheckoutPage() {
     fetch("/api/payment-methods")
       .then((res) => res.json())
       .then((data) => {
-        if (data.success) {
-          setPaymentMethods(data.data);
-          if (data.data.length > 0) {
-            setSelectedPayment(data.data[0].type);
-          }
+        // API returns array directly, not wrapped in { success, data }
+        const methods = Array.isArray(data) ? data : (data.data || []);
+        setPaymentMethods(methods);
+        if (methods.length > 0) {
+          setSelectedPayment(methods[0].type);
         }
       });
 
@@ -45,8 +45,10 @@ export default function CheckoutPage() {
     fetch("/api/settings")
       .then((res) => res.json())
       .then((data) => {
-        if (data.success && data.data.whatsappNumber) {
-          setWhatsappNumber(data.data.whatsappNumber);
+        // API returns settings directly, not wrapped in { success, data }
+        const settings = data.data || data;
+        if (settings.whatsappNumber) {
+          setWhatsappNumber(settings.whatsappNumber);
         }
       });
   }, [items.length, router]);
@@ -78,6 +80,15 @@ export default function CheckoutPage() {
     try {
       // Submit each cart item as a contribution
       for (const item of items) {
+        // External purchases don't require payment - they bought from Amazon, etc.
+        const isExternalPurchase = item.giftType === "external";
+
+        // For external purchases, use the checkout form message (not the cart item message)
+        // For other types, use item-specific message or fall back to checkout form message
+        const guestMessage = isExternalPurchase
+          ? message  // Use checkout form message for external purchases
+          : (item.message || message);  // Use item message or checkout form message
+
         const res = await fetch("/api/contributions", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -85,10 +96,11 @@ export default function CheckoutPage() {
             giftId: item.giftId,
             guestName: name,
             guestPhone: phone,
-            guestMessage: item.message || message,
+            guestMessage,
             amount: item.amount,
             currency: item.currency,
             paymentMethod: selectedPayment,
+            isExternalPurchase, // Flag for external purchases (no payment verification needed)
           }),
         });
 
@@ -99,12 +111,22 @@ export default function CheckoutPage() {
 
       // Generate WhatsApp message
       const giftNames = items.map((i) => i.giftTitle).join(", ");
+      const hasMonetaryContributions = totalAmount > 0;
       const total = formatCurrency(totalAmount, items[0]?.currency || "EUR");
-      const whatsappMessage = `¡Hola! Acabo de hacer una contribución para el baby shower de Rocío.
+
+      // Different message for external purchases vs monetary contributions
+      const whatsappMessage = hasMonetaryContributions
+        ? `¡Hola! Acabo de hacer una contribución para el baby shower de Rocío.
 
 Regalo(s): ${giftNames}
 Cantidad: ${total}
 Método: ${selectedPayment}
+Nombre: ${name}
+
+¡Gracias! 🌼`
+        : `¡Hola! Acabo de comprar un regalo para el baby shower de Rocío.
+
+Regalo(s): ${giftNames}
 Nombre: ${name}
 
 ¡Gracias! 🌼`;
