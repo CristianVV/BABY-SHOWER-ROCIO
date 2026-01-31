@@ -73,19 +73,12 @@ export default function GalleryClient({ categories, gifts }: GalleryClientProps)
         </button>
       )}
 
-      {/* Currency selector */}
-      <div className="flex justify-center mb-6">
-        <CurrencySelector
-          value={currency}
-          onChange={setCurrency}
-        />
-      </div>
-
       {/* Gift gallery */}
       <GiftGallery
         initialCategories={categories}
         initialGifts={gifts}
         currency={currency}
+        onCurrencyChange={setCurrency}
         onAddToCart={handleAddToCart}
       />
 

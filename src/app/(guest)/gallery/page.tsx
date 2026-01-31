@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import prisma from "@/lib/db";
 import HeroSection from "@/components/guest/HeroSection";
 import GalleryClient from "@/components/guest/GalleryClient";
+import LocationMap from "@/components/ui/LocationMap";
 
 async function getSettings() {
   const settings = await prisma.siteSettings.findUnique({
@@ -36,7 +37,7 @@ export default async function GalleryPage() {
   ]);
 
   return (
-    <main className="min-h-screen">
+    <main className="min-h-screen bg-background">
       <Suspense fallback={<div className="h-96 animate-pulse bg-background-light" />}>
         <HeroSection
           eventTitle={settings?.eventTitle || "Baby Shower de Rocío"}
@@ -47,8 +48,15 @@ export default async function GalleryPage() {
         />
       </Suspense>
 
+      {/* Location Map Section */}
+      <section className="container mx-auto px-4 -mt-10 relative z-20 mb-12">
+        <div className="max-w-4xl mx-auto">
+          <LocationMap />
+        </div>
+      </section>
+
       <section className="container mx-auto px-4 py-12">
-        <h2 className="text-3xl font-serif text-center mb-8">
+        <h2 className="text-4xl font-serif text-center mb-12 text-primary font-medium">
           Lista de Regalos
         </h2>
         <Suspense fallback={<div className="grid gap-6 animate-pulse" />}>

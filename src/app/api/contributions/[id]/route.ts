@@ -83,14 +83,29 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
         },
       });
 
-      // Update gift currentAmount if needed
+      // Update gift currentAmount and status if needed
       let updatedGift = existingContribution.gift;
-      if (amountDelta !== 0) {
+
+      // For external gifts: mark as completed when contribution is verified
+      const isExternalGift = existingContribution.gift.type === "external";
+      const isExternalPurchaseVerified = isExternalGift && newStatus === "verified";
+      const isExternalPurchaseUnverified = isExternalGift && previousStatus === "verified" && newStatus !== "verified";
+
+      if (amountDelta !== 0 || isExternalPurchaseVerified || isExternalPurchaseUnverified) {
         const newCurrentAmount = Math.max(0, existingContribution.gift.currentAmount + amountDelta);
 
         // Determine new gift status
         let newGiftStatus = existingContribution.gift.status;
-        if (existingContribution.gift.type === "fundable" && existingContribution.gift.targetAmount) {
+
+        if (isExternalGift) {
+          // External gifts: completed when verified, available when unverified
+          if (isExternalPurchaseVerified) {
+            newGiftStatus = "completed";
+          } else if (isExternalPurchaseUnverified) {
+            newGiftStatus = "available";
+          }
+        } else if (existingContribution.gift.type === "fundable" && existingContribution.gift.targetAmount) {
+          // Fundable gifts: status based on progress
           if (newCurrentAmount >= existingContribution.gift.targetAmount) {
             newGiftStatus = "completed";
           } else if (newCurrentAmount > 0) {

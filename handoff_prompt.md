@@ -20,13 +20,25 @@ Please read the `CLAUDE.md` file in this directory first - it contains comprehen
 
 The MVP is **fully functional** and includes:
 
+> **Note (2026-01-30):** Fixed checkout bugs and added external purchase tracking:
+> 1. Payment methods weren't displaying (API format mismatch)
+> 2. External purchase checkout now tracks in database (admin can verify → removes from gallery)
+> 3. Added reminder popup when clicking "Ver en tienda"
+> See TASKS.md changelog for details.
+
 - **Guest Portal** (password: `Rocio2026`)
   - Password gate entry
-  - Gift gallery with category filtering
+  - Gift gallery with **improved 4-column grid layout** and **toggleable filters**
   - Three gift types: Fundable, External Purchase, Custom Contribution
   - Cart system with session storage
   - Checkout flow with payment instructions
   - WhatsApp confirmation integration
+
+- **Design Refresh**
+  - **New "Sand" Theme**: 
+    - Background: `#E6DCCA`
+    - Foreground: `#3D3225`
+  - Typography: Cormorant Garamond (headings) + Inter (body)
 
 - **Admin Dashboard** (password: `AdminRocio2026`)
   - Dashboard with stats overview
@@ -53,29 +65,6 @@ The MVP is **fully functional** and includes:
 | PostgreSQL | 16-alpine |
 | Framer Motion | 11.11.0 |
 
-### Project Structure
-
-```
-src/
-├── app/
-│   ├── page.tsx              # Password gate (entry point)
-│   ├── (guest)/              # Guest routes (gallery, checkout, gracias)
-│   ├── admin/                # Admin routes (login, dashboard, gifts, etc.)
-│   └── api/                  # API endpoints
-├── components/
-│   ├── guest/                # Guest-facing components
-│   ├── admin/                # Admin components
-│   └── ui/                   # Shared UI components
-├── hooks/
-│   └── useCart.tsx           # Cart state management
-├── lib/
-│   ├── auth.ts               # Session authentication
-│   ├── db.ts                 # Prisma client
-│   └── utils.ts              # Helpers
-└── types/
-    └── index.ts              # TypeScript interfaces
-```
-
 ### Database Models
 
 - **Category** - Gift categories (Ropa, Muebles, etc.)
@@ -92,19 +81,10 @@ docker compose up -d db
 
 # Start dev server
 npm run dev
-# or if port 3000 is busy:
-PORT=3002 npm run dev
+# Note: Check terminal output for port (usually 3000, 3001, or 3002)
 ```
 
-The dev server is currently running on **port 3002**: http://localhost:3002
-
-### Git Status
-
-The project has 2 commits:
-1. Initial setup with documentation
-2. Complete MVP implementation (68 files)
-
-All changes are committed. The repository is local only (not pushed to remote yet).
+The dev server was last running on **port 3001**.
 
 ---
 
@@ -120,14 +100,14 @@ All changes are committed. The repository is local only (not pushed to remote ye
 
 ---
 
-## Design System: "Daisy Warmth"
+## Design System: "Daisy Warmth" (Sand Edition)
 
-Color palette inspired by invitation video with chamomile/daisy theme:
+Updated color palette based on user feedback:
 
-- Background: `#D9CBBA` (warm beige)
-- Text: `#3D3225` (dark brown)
-- Accent Yellow: `#E8B931` (daisy center)
-- Accent Green: `#7A9B5C` (stem green)
+- Background: `#E6DCCA` (Sand)
+- Text: `#3D3225` (Dark Brown)
+- Accent Yellow: `#E8B931` (Daisy center)
+- Accent Green: `#7A9B5C` (Stem green)
 
 Typography: Cormorant Garamond (headings) + Inter (body)
 

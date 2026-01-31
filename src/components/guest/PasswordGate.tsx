@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import Button from "@/components/ui/Button";
 import { cn } from "@/lib/utils";
 
@@ -49,9 +50,15 @@ export default function PasswordGate({ validatePassword }: PasswordGateProps) {
         <div className="card p-8 md:p-10 shadow-lg">
           {/* Header */}
           <div className="text-center mb-8">
-            <h1 className="font-serif text-3xl md:text-4xl text-foreground mb-3">
-              Baby Shower de Rocio
-            </h1>
+            <div className="relative w-full h-24 mb-4">
+              <Image
+                src="/Baby-Shower-text.png"
+                alt="Baby Shower de Rocío"
+                fill
+                className="object-contain"
+                priority
+              />
+            </div>
             <p className="text-foreground-secondary text-sm md:text-base">
               Introduce la contrasena para acceder a la lista de regalos
             </p>

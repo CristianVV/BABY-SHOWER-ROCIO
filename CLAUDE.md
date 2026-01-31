@@ -15,6 +15,15 @@
 | **Admin Password** | `AdminRocio2026` (configurable in admin) |
 | **Dev Server** | `http://localhost:3000` (or 3001/3002 if port busy) |
 | **Admin Panel** | `/admin/login` |
+| **VPS Guide** | See [VPS_DEPLOYMENT.md](./VPS_DEPLOYMENT.md) for deployment & cleanup |
+
+---
+
+## 🤖 Agentic Workflow Rules
+
+1.  **Documentation First**: You **MUST** update `CLAUDE.md` (for context/rules) and `TASKS.md` (for progress) as you work.
+2.  **Transparency**: If you make architectural changes, reference them in `README.md`.
+3.  **Verification**: Always verify your changes before marking a task as complete.
 
 ---
 
@@ -372,7 +381,7 @@ Inspired by the invitation video featuring chamomile/daisy bouquet.
 
 ```css
 /* Backgrounds */
---background:       #D9CBBA;  /* Warm beige */
+--background:       #E6DCCA;  /* Sand color */
 --background-light: #F5F0E8;  /* Light cream (cards) */
 --background-white: #FFFEF9;  /* Off-white */
 
@@ -603,6 +612,13 @@ Example: `feat: add contribution verification flow`
 
 ---
 
+## Verification Log
+
+- **2026-01-30**: Fixed checkout bug where payment methods were not displaying. Root cause: API returns raw array but checkout expected `{ success, data }` wrapper. Updated `src/app/(guest)/checkout/page.tsx` to handle both formats.
+- **2026-01-24**: Verified Guest and Admin flows. App runs successfully on Docker. Fallback port 3001 is used if 3000 is busy.
+
+---
+
 ## Future Considerations (Post-MVP)
 
 > These are noted for future phases. Do NOT implement unless explicitly requested.
@@ -684,6 +700,23 @@ npm install
 
 ---
 
+## Deployment Documentation
+
+For complete deployment and cleanup instructions, see:
+
+- **[INSTRUCTIONS.md](./INSTRUCTIONS.md)** - Local development setup and Docker deployment
+- **[VPS_DEPLOYMENT.md](./VPS_DEPLOYMENT.md)** - Complete VPS deployment guide with step-by-step cleanup instructions
+
+**VPS_DEPLOYMENT.md includes:**
+- Initial VPS setup and security configuration
+- Application deployment with Docker
+- Nginx reverse proxy configuration
+- SSL certificate setup with Let's Encrypt
+- Monitoring and maintenance procedures
+- **Complete removal guide** - How to cleanly remove the application without leaving any residues after the event
+
+---
+
 ## Contact
 
 - **Developer**: Cristian Vidal
@@ -692,4 +725,4 @@ npm install
 
 ---
 
-*Last updated: January 2026*
+*Last updated: January 31, 2026*
