@@ -11,7 +11,12 @@ type Step = "info" | "payment" | "confirm";
 
 export default function CheckoutPage() {
   const router = useRouter();
-  const { items, guestName, guestPhone, setGuestInfo, totalAmount, clearCart } = useCart();
+  const { items, guestName, guestPhone, setGuestInfo, totalAmount, clearCart } =
+    useCart();
+
+  // Check if cart contains ONLY external purchases (no monetary contributions)
+  const isExternalOnlyCart =
+    items.length > 0 && items.every((item) => item.giftType === "external");
   const [step, setStep] = useState<Step>("info");
   const [name, setName] = useState(guestName);
   const [phone, setPhone] = useState(guestPhone);
@@ -34,7 +39,7 @@ export default function CheckoutPage() {
       .then((res) => res.json())
       .then((data) => {
         // API returns array directly, not wrapped in { success, data }
-        const methods = Array.isArray(data) ? data : (data.data || []);
+        const methods = Array.isArray(data) ? data : data.data || [];
         setPaymentMethods(methods);
         if (methods.length > 0) {
           setSelectedPayment(methods[0].type);
@@ -61,7 +66,8 @@ export default function CheckoutPage() {
     }
     setGuestInfo(name, phone);
     setError("");
-    setStep("payment");
+    // Skip payment step for external-only carts
+    setStep(isExternalOnlyCart ? "confirm" : "payment");
   };
 
   const handlePaymentSelect = () => {
@@ -86,8 +92,8 @@ export default function CheckoutPage() {
         // For external purchases, use the checkout form message (not the cart item message)
         // For other types, use item-specific message or fall back to checkout form message
         const guestMessage = isExternalPurchase
-          ? message  // Use checkout form message for external purchases
-          : (item.message || message);  // Use item message or checkout form message
+          ? message // Use checkout form message for external purchases
+          : item.message || message; // Use item message or checkout form message
 
         const res = await fetch("/api/contributions", {
           method: "POST",
@@ -142,7 +148,9 @@ Nombre: ${name}
       // Redirect to thank you page
       router.push("/gracias");
     } catch {
-      setError("Hubo un error al procesar tu contribución. Por favor intenta de nuevo.");
+      setError(
+        "Hubo un error al procesar tu contribución. Por favor intenta de nuevo.",
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -155,17 +163,20 @@ Nombre: ${name}
       <div className="max-w-lg mx-auto">
         <h1 className="text-3xl font-serif text-center mb-8">Checkout</h1>
 
-        {/* Progress indicator */}
+        {/* Progress indicator - 2 steps for external-only, 3 for others */}
         <div className="flex justify-center gap-2 mb-8">
-          {(["info", "payment", "confirm"] as Step[]).map((s, i) => (
+          {(isExternalOnlyCart
+            ? ["info", "confirm"]
+            : (["info", "payment", "confirm"] as Step[])
+          ).map((s, i, arr) => (
             <div
               key={s}
               className={`w-3 h-3 rounded-full transition-colors ${
                 step === s
                   ? "bg-accent-yellow"
-                  : i < ["info", "payment", "confirm"].indexOf(step)
-                  ? "bg-accent-green"
-                  : "bg-foreground/20"
+                  : i < arr.indexOf(step)
+                    ? "bg-accent-green"
+                    : "bg-foreground/20"
               }`}
             />
           ))}
@@ -208,7 +219,9 @@ Nombre: ${name}
               </div>
 
               <div>
-                <label className="label block mb-1">Mensaje para el bebé (opcional)</label>
+                <label className="label block mb-1">
+                  Mensaje para el bebé (opcional)
+                </label>
                 <textarea
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
@@ -220,7 +233,7 @@ Nombre: ${name}
               {error && <p className="text-state-error text-sm">{error}</p>}
 
               <button type="submit" className="btn-primary w-full">
-                Continuar
+                {isExternalOnlyCart ? "Confirmar la compra" : "Continuar"}
               </button>
             </motion.form>
           )}
@@ -266,7 +279,9 @@ Nombre: ${name}
                     </div>
                     <div>
                       <p className="font-medium">{method.label}</p>
-                      <p className="text-sm text-foreground-muted">{method.currency}</p>
+                      <p className="text-sm text-foreground-muted">
+                        {method.currency}
+                      </p>
                     </div>
                   </label>
                 ))}
@@ -301,26 +316,42 @@ Nombre: ${name}
               exit={{ opacity: 0, x: -20 }}
               className="card p-6 space-y-6"
             >
-              <h2 className="text-xl font-serif mb-4">Confirmar y pagar</h2>
+              <h2 className="text-xl font-serif mb-4">
+                {isExternalOnlyCart ? "Confirmar compra" : "Confirmar y pagar"}
+              </h2>
 
               {/* Order summary */}
               <div className="space-y-3 pb-4 border-b border-foreground/10">
                 {items.map((item) => (
                   <div key={item.giftId} className="flex justify-between">
-                    <span className="text-foreground-secondary">{item.giftTitle}</span>
-                    <span className="font-medium">
-                      {formatCurrency(item.amount, item.currency)}
+                    <span className="text-foreground-secondary">
+                      {item.giftTitle}
                     </span>
+                    {item.giftType !== "external" && (
+                      <span className="font-medium">
+                        {formatCurrency(item.amount, item.currency)}
+                      </span>
+                    )}
+                    {item.giftType === "external" && (
+                      <span className="text-accent-green text-sm">
+                        Compra externa ✓
+                      </span>
+                    )}
                   </div>
                 ))}
-                <div className="flex justify-between text-lg font-medium pt-2">
-                  <span>Total</span>
-                  <span>{formatCurrency(totalAmount, items[0]?.currency || "EUR")}</span>
-                </div>
+                {/* Only show total for monetary contributions */}
+                {!isExternalOnlyCart && (
+                  <div className="flex justify-between text-lg font-medium pt-2">
+                    <span>Total</span>
+                    <span>
+                      {formatCurrency(totalAmount, items[0]?.currency || "EUR")}
+                    </span>
+                  </div>
+                )}
               </div>
 
-              {/* Payment instructions */}
-              {selectedMethod && (
+              {/* Payment instructions - only for monetary contributions */}
+              {!isExternalOnlyCart && selectedMethod && (
                 <div className="bg-background-light rounded-xl p-4">
                   <h3 className="font-medium mb-2">
                     Instrucciones de pago - {selectedMethod.label}
@@ -328,7 +359,9 @@ Nombre: ${name}
                   {selectedMethod.type === "bizum" && (
                     <p className="text-foreground-secondary">
                       Envía el Bizum al número:{" "}
-                      <span className="font-mono font-medium">{selectedMethod.value}</span>
+                      <span className="font-mono font-medium">
+                        {selectedMethod.value}
+                      </span>
                     </p>
                   )}
                   {selectedMethod.type === "revolut" && (
@@ -354,7 +387,9 @@ Nombre: ${name}
               )}
 
               <p className="text-sm text-foreground-muted text-center">
-                Tu contribución aparecerá una vez que la familia verifique la transferencia.
+                {isExternalOnlyCart
+                  ? "¡Gracias por comprar el regalo! La familia lo recibirá pronto. 🎁"
+                  : "Tu contribución aparecerá una vez que la familia verifique la transferencia."}
               </p>
 
               {error && <p className="text-state-error text-sm">{error}</p>}
@@ -362,7 +397,9 @@ Nombre: ${name}
               <div className="flex gap-3">
                 <button
                   type="button"
-                  onClick={() => setStep("payment")}
+                  onClick={() =>
+                    setStep(isExternalOnlyCart ? "info" : "payment")
+                  }
                   className="btn-secondary flex-1"
                   disabled={isSubmitting}
                 >
