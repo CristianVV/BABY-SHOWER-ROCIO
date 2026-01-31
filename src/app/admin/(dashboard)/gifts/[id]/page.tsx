@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, use } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import type { Category, Gift } from "@/types";
@@ -11,8 +11,8 @@ interface GiftWithCategory extends Gift {
   category: Category;
 }
 
-export default function EditGiftPage({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = use(params);
+export default function EditGiftPage({ params }: { params: { id: string } }) {
+  const { id } = params;
   const router = useRouter();
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(false);
